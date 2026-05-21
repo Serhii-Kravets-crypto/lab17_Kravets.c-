@@ -1,1 +1,106 @@
-# -.1_-_-111111
+// lab17_Kravets.cрр.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+#include "windows.h"
+
+class Vector3D
+{
+protected:
+
+	double x1, y1, z1;
+	double x2, y2, z2;
+
+public:
+
+	void set(double startX, double startY, double startZ, double endX, double endY, double endZ)
+	{
+		x1 = startX;
+		y1 = startY;
+		z1 = startZ;
+		x2 = endX;
+		y2 = endY;
+		z2 = endZ;
+	}
+
+	double getX1() { return x1; }
+	double getY1() { return y1; }
+	double getZ1() { return z1; }
+	double getX2() { return x2; }
+	double getY2() { return y2; }
+	double getZ2() { return z2; }
+
+	double getDx() { return x2 - x1; }
+	double getDy() { return y2 - y1; }
+	double getDz() { return z2 - z1; }
+
+	void print()
+	{
+		cout << "Координати початку: (" << x1 << ", " << y1 << ", " << z1 << ")" << endl;
+		cout << "Координати кінця: (" << x2 << ", " << y2 << ", " << z2 << ")" << endl;
+		cout << "Проекції вектора: {" << getDx() << ", " << getDy() << ", " << getDz() << "}" << endl;
+	}
+};
+
+class ExtendedVector3D : public Vector3D
+{
+public:
+
+	double getLength()
+	{
+		double dx = getDx();
+		double dy = getDy();
+		double dz = getDz();
+		return sqrt(dx * dx + dy * dy + dz * dz);
+	}
+
+	double scalarProduct(ExtendedVector3D& other)
+	{
+		return (getDx() * other.getDx() + getDy() * other.getDy() + getDz() * other.getDz());
+	}
+
+	double cosineAngle(ExtendedVector3D& other)
+	{
+		double len1 = getLength();
+		double len2 = other.getLength();
+
+		if (len1 == 0 || len2 == 0)
+		{
+			cout << "Помилка: неможливо обчислити кут з нульовим вектором!" << endl;
+			return 0;
+		}
+
+		return scalarProduct(other) / (len1 * len2);
+	}
+};
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	/*Скласти опис класу для вектора, заданого координатами його кінців у тривимірному просторі.
+	Написати програму, яка демонструвала б усі розроблені елементи класу.
+	Створити дочірній клас, що забезпечує операції обчислення скалярного добутку двох векторів,
+	довжини вектора і косинуса кута між векторами.*/
+
+	ExtendedVector3D v1;
+	ExtendedVector3D v2;
+
+	v1.set(0.0, 0.0, 0.0, 3.0, 4.0, 0.0);
+	v2.set(1.0, 2.0, 1.0, 1.0, 6.0, 5.0);
+
+	v1.print();
+	cout << "Довжина Вектора 1: " << v1.getLength() << endl;
+	cout << " " << endl;
+
+	v2.print();
+	cout << "Довжина Вектора 2: " << v2.getLength() << endl;
+	cout << " " << endl;
+
+	cout << "Скалярний добуток векторів: " << v1.scalarProduct(v2) << endl;
+	cout << "Косинус кута між ними: " << v1.cosineAngle(v2) << endl;
+}
+
